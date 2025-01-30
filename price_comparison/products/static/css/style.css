@@ -1,0 +1,201 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Header and Navigation */
+header {
+    background-color: #008080; /* Teal background */
+    padding: 15px 0;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+nav a {
+    color: white; /* White text for links */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+nav a:hover {
+    color: #f4f4f4; /* Lighter text color on hover */
+    border-bottom: 2px solid #f4f4f4; /* Add underline effect on hover */
+}
+
+/* Main Content */
+main {
+    margin-top: 30px;
+}
+
+/* Buttons */
+button {
+    background-color: #008080; /* Teal button background */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #004d47; /* Darker teal on hover */
+}
+
+/* Container for content */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+table th {
+    background-color: #008080; /* Teal header background */
+    color: white; /* White text */
+}
+
+table tr:hover {
+    background-color: #f4f4f4; /* Light gray hover effect on rows */
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #008080;
+    color: white;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+/* Form Inputs */
+input[type="text"], input[type="password"], input[type="email"], select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+/* Form Input Fields */
+.input-field {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-top: 5px;
+}
+
+/* Placeholder styling */
+.input-field::placeholder {
+    color: #888;
+    font-style: italic;
+}
+
+/* Styles for the Register Page */
+.register-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #008080;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input[type="text"], input[type="password"], input[type="email"], select {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 12px;
+    background-color: #008080;
+    color: white;
+    border: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #004d47;
+}
+
+/* Message Box for Errors */
+.messages {
+    background-color: #ffebeb;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ffcccc;
+    color: red;
+    border-radius: 5px;
+}
+
+.error-message {
+    font-size: 14px;
+}
+
+/* Links */
+a {
+    text-align: center;
+    color: #008080;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}

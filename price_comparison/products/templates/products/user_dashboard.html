@@ -1,0 +1,47 @@
+<h1>Available Products</h1>
+
+<!-- Search form -->
+<form method="GET" action="{% url 'user_dashboard' %}">
+    <input type="text" name="q" value="{{ query }}" placeholder="Search for products..." />
+    <button type="submit">Search</button>
+</form>
+
+<!-- Category filter form -->
+<form method="GET" action="{% url 'user_dashboard' %}">
+    <label for="category">Category:</label>
+    <select name="category" id="category">
+        <option value="">All Categories</option>
+        {% for category in categories %}
+            <option value="{{ category.id }}" {% if category.id == selected_category %}selected{% endif %}>
+                {{ category.name }}
+            </option>
+        {% endfor %}
+    </select>
+    <button type="submit">Filter</button>
+</form>
+
+<!-- Product List -->
+<table>
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Vendor</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>${{ product.price }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ product.vendor.username }}</td>  <!-- Display vendor username -->
+                <td><img src="{{ product.image.url }}" alt="{{ product.name }}" width="100"></td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="5">No products available.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,10 @@
+{% extends 'products/base.html' %}
+{% block content %}
+    <h2>Admin Login</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Admin Username" required>
+        <input type="password" name="password" placeholder="Admin Password" required>
+        <button type="submit">Login</button>
+    </form>
+{% endblock %}

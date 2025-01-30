@@ -1,0 +1,70 @@
+{% extends 'products/base.html' %}
+
+{% block content %}
+    <h2>Welcome, Admin</h2>
+    <p>Manage users, shops, and products here.</p>
+    <a href="{% url 'logout' %}">Logout</a>
+
+    <h3>Registered Users</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>User Name</th>
+                <th>User Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.usertype.user_type }}</td> <!-- Display user type (Vendor/Regular) -->
+                    <td>
+                        <form method="POST" action="{% url 'delete_user' user.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Registered Shops</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Shop Name</th>
+                <th>Owner</th>
+                <th>Products</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vendor_data in vendor_products %}
+                <tr>
+                    <td>{{ vendor_data.vendor.shop_name }}</td>
+                    <td>{{ vendor_data.vendor.user.username }}</td>
+                    <td>
+                        <ul>
+                            {% for product in vendor_data.products %}
+                                <li>
+                                    {{ product.name }} - ${{ product.price }}
+                                    <a href="{% url 'product_detail' product.id %}">View</a> <!-- View button -->
+                                </li>
+                            {% empty %}
+                                <li>No products added yet</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        <form method="POST" action="{% url 'delete_vendor' vendor_data.vendor.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,31 @@
+<h1>My Products</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Image</th>
+            <th>Description</th>  <!-- Add a new column for description -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>${{ product.price }}</td>
+                <td>{{ product.quantity }}</td>
+                <td><img src="{{ product.image.url }}" alt="{{ product.name }}" width="100"></td>
+                <td>
+                    <a href="#description-{{ product.id }}" data-toggle="collapse">View Description</a>
+                    <div id="description-{{ product.id }}" class="collapse">
+                        <p>{{ product.description }}</p>  <!-- Assuming you have a description field in your Product model -->
+                    </div>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="5">No products found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>

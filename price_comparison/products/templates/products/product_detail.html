@@ -1,0 +1,17 @@
+{% extends 'products/base.html' %}
+
+{% block content %}
+    <h2>Product Details</h2>
+    <h3>{{ product.name }}</h3>
+    <p><strong>Price:</strong> ${{ product.price }}</p>
+    <p><strong>Description:</strong> {{ product.description }}</p>
+    <p><strong>Category:</strong> {{ product.category.name }}</p>
+    <p><strong>Stock Quantity:</strong> {{ product.quantity }}</p>
+    <p><strong>Vendor:</strong> {{ product.vendor.username }}</p>
+
+    {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" width="200">
+    {% endif %}
+
+    <a href="{% url 'admin_dashboard' %}">Back to Admin Dashboard</a>
+{% endblock %}

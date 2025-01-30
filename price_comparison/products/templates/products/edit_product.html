@@ -1,0 +1,25 @@
+<h2>Edit Product</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <label for="id_name">Name:</label>
+    {{ form.name }}
+    
+    <label for="id_price">Price:</label>
+    {{ form.price }}
+
+    <label for="id_quantity">Stock:</label>  
+    {{ form.quantity }}
+
+    <label for="id_image">Image:</label>
+    {{ form.image }}
+
+    <label for="id_description">Description:</label>
+    {{ form.description }}
+
+    <label for="id_category">Category:</label>
+    {{ form.category }}
+
+    <button type="submit">Save Changes</button>
+</form>

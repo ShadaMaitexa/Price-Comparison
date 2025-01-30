@@ -1,0 +1,56 @@
+<h1>Vendor Dashboard</h1>
+
+<!-- Product Upload Form -->
+<h2>Add Product</h2>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <label for="id_name">Name:</label>
+    {{ form.name }}
+    
+    <label for="id_price">Price:</label>
+    {{ form.price }}
+
+    <label for="id_quantity">Stock:</label>  
+    {{ form.quantity }}
+
+    <label for="id_image">Image:</label>
+    {{ form.image }}
+
+    <label for="id_description">Description:</label>
+    {{ form.description }}
+
+    <label for="id_category">Category:</label>
+    {{ form.category }}
+
+    <button type="submit">Add Product</button>
+</form>
+
+<!-- My Products List -->
+<h2>My Products</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>${{ product.price }}</td>
+                <td>{{ product.quantity }}</td>
+                <td><img src="{{ product.image.url }}" alt="{{ product.name }}" width="100"></td>
+                <td>
+                    <a href="{% url 'edit_product' product.id %}">Edit</a> |
+                    <a href="{% url 'delete_product' product.id %}">Delete</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="4">No products found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
