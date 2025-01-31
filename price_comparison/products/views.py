@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm,ProductForm
 from .models import UserType, VendorProfile,Product,Category
 from django.contrib.auth.models import User
 
@@ -17,64 +16,70 @@ def index(request):
 #  User & Vendor Registration
 def register(request):
     if request.method == "POST":
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            # Check if user already exists
-            username = form.cleaned_data['username']
-            if User.objects.filter(username=username).exists():
-                messages.error(request, "Username already exists. Please choose another one.")
-                return redirect('register')
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
+        user_type = request.POST.get("user_type")
+        shop_name = request.POST.get("shop_name")
+        phone = request.POST.get("phone")
 
-            # Save user but don't commit to the database yet
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
-            user.save()  # Now save the user object to the database
+        # Validate input fields manually
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists. Please choose another one.")
+            return redirect("register")
 
-            # Create UserType for this user
-            user_type = UserType.objects.create(user=user, user_type=form.cleaned_data['user_type'])
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match!")
+            return redirect("register")
 
-            # If the user is a vendor, we need to check for the shop name and create a VendorProfile
-            if user_type.user_type == "vendor":
-                shop_name = form.cleaned_data.get("shop_name")
-                if not shop_name:
-                    messages.error(request, "Shop Name is required for vendors.")
-                    user.delete()  # Delete the user if vendor info is incomplete
-                    return redirect('register')
+        # Create the user
+        user = User.objects.create(username=username, email=email)
+        user.set_password(password)
+        user.save()
 
-                VendorProfile.objects.create(user=user, shop_name=shop_name, phone=form.cleaned_data.get("phone"))
+        # Create UserType entry
+        user_type_entry = UserType.objects.create(user=user, user_type=user_type)
 
-            messages.success(request, "Registration successful! Please log in.")
-            return redirect('login')
+        # If user is a vendor, create VendorProfile
+        if user_type == "vendor":
+            if not shop_name:
+                messages.error(request, "Shop Name is required for vendors.")
+                user.delete()  # Rollback user creation
+                return redirect("register")
 
-    else:
-        form = UserRegisterForm()
+            VendorProfile.objects.create(user=user, shop_name=shop_name, phone=phone)
 
-    return render(request, "products/register.html", {"form": form})
+        messages.success(request, "Registration successful! Please log in.")
+        return redirect("login")
 
+    return render(request, "products/register.html")
 
 #  Single Login View for Users & Vendors
 def login_view(request):
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "").strip()
+
+        if not username or not password:
+            messages.error(request, "Both username and password are required.")
+            return redirect("login")
+
         user = authenticate(request, username=username, password=password)
-        
-        if user:
+
+        if user is not None:
             login(request, user)
 
-            try:
-                user_type = UserType.objects.get(user=user)
-                
+            # Fetch user type
+            user_type = UserType.objects.filter(user=user).first()
+            if user_type:
                 if user_type.user_type == "vendor":
                     return redirect("vendor_dashboard")
                 else:
                     return redirect("user_dashboard")  # Redirect users to view all products
-
-            except UserType.DoesNotExist:
+            else:
                 messages.error(request, "User type not found. Please contact support.")
                 return redirect("login")
-
         else:
             messages.error(request, "Invalid username or password.")
             return redirect("login")
@@ -87,30 +92,29 @@ def admin_login(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-            request.session['is_admin'] = True  # Store Admin Session
+        admin_username = "admin123"
+        admin_password = "admin123"
+        if username == admin_username and password == admin_password:
+            request.session["is_admin"] = True  # Store admin session
             return redirect("admin_dashboard")
         else:
             messages.error(request, "Invalid admin credentials")
             return redirect("admin_login")
 
     return render(request, "products/admin_login.html")
-
 #  Admin Dashboard (Restrict Access)
 @login_required
 def admin_dashboard(request):
     if not request.session.get('is_admin'):
-        messages.error(request, "You must log in as admin first!")
+        messages.error(request, "You must log in as an admin first!")
         return redirect("admin_login")
 
-    # Fetch all users and their associated shops (if any)
     users = User.objects.all()
     vendors = VendorProfile.objects.all()
 
-    # Fetch products associated with each shop/vendor
     vendor_products = []
     for vendor in vendors:
-        products = Product.objects.filter(vendor=vendor.user)  # Get products for this vendor
+        products = Product.objects.filter(vendor=vendor.user)  # Fetch vendor's products
         vendor_products.append({
             'vendor': vendor,
             'products': products
@@ -119,31 +123,32 @@ def admin_dashboard(request):
     return render(request, "products/admin_dashboard.html", {
         "users": users,
         "vendors": vendors,
-        "vendor_products": vendor_products,  # Pass the vendor products as a list of dictionaries
+        "vendor_products": vendor_products,
     })
 @login_required
 def product_detail(request, product_id):
-    # Get the product by ID
     product = get_object_or_404(Product, id=product_id)
-
     return render(request, 'products/product_detail.html', {'product': product})
+
 # Delete a User
 @login_required
 def delete_user(request, user_id):
     if not request.session.get('is_admin'):
-        messages.error(request, "You must log in as admin first!")
+        messages.error(request, "You must log in as an admin first!")
         return redirect("admin_login")
 
     user = get_object_or_404(User, id=user_id)
 
-    # Check if user is a vendor and delete associated products if needed
+    # Check if the user is a vendor
     if hasattr(user, 'vendorprofile'):
-        # Delete the vendor's products first
-        VendorProfile.objects.filter(user=user).delete()
+        # Delete vendor profile and associated products
+        products = Product.objects.filter(vendor=user)
+        products.delete()
+        user.vendorprofile.delete()  # Delete vendor profile
 
     user.delete()  # Delete the user
 
-    messages.success(request, f"User {user.username} has been deleted.")
+    messages.success(request, f"User {user.username} has been deleted successfully.")
     return redirect('admin_dashboard')
 
 
@@ -151,21 +156,22 @@ def delete_user(request, user_id):
 @login_required
 def delete_vendor(request, vendor_id):
     if not request.session.get('is_admin'):
-        messages.error(request, "You must log in as admin first!")
+        messages.error(request, "You must log in as an admin first!")
         return redirect("admin_login")
 
     vendor = get_object_or_404(VendorProfile, id=vendor_id)
-    user = vendor.user  # Get the user associated with the vendor
+    user = vendor.user  # Get associated user
 
-    # Delete all products associated with this vendor
-    products = Product.objects.filter(vendor=user)
-    products.delete()
+    # Delete all products related to this vendor
+    Product.objects.filter(vendor=user).delete()
 
-    # Now delete the vendor profile and the user associated with the shop
+    # Delete the vendor profile and user account
     vendor.delete()
+    user.delete()
 
-    messages.success(request, f"Shop {vendor.shop_name} and its products have been deleted.")
+    messages.success(request, f"Vendor {user.username} and their shop have been deleted.")
     return redirect('admin_dashboard')
+
 
 
 #  Logout for Admin, Users & Vendors
@@ -176,30 +182,24 @@ def logout_view(request):
 # User Dashboard (Regular Users)
 @login_required
 def user_dashboard(request):
-    query = request.GET.get('q', '')  # Get search query from URL parameters
-    category_id = request.GET.get('category', None)  # Get selected category from URL parameters
+    query = request.GET.get('q', '').strip()  # Get search query
+    category_id = request.GET.get('category', '')  # Get category filter
 
-    # Fetch all categories for the dropdown in the template
-    categories = Category.objects.all()
-
-    # Start by fetching all products
-    products = Product.objects.all()
+    categories = Category.objects.all()  # Get all categories for dropdown
+    products = Product.objects.all()  # Fetch all products initially
 
     if query:
-        # Filter products based on the search query
         products = products.filter(name__icontains=query) | products.filter(description__icontains=query)
 
     if category_id:
-        # Filter products based on the selected category
         products = products.filter(category_id=category_id)
 
     return render(request, "products/user_dashboard.html", {
         "products": products,
         "query": query,
         "categories": categories,
-        "selected_category": category_id,  # Pass selected category to the template
+        "selected_category": category_id,  # Keep track of selected category
     })
-
 
 @login_required
 def vendor_dashboard(request):
@@ -208,43 +208,111 @@ def vendor_dashboard(request):
         return redirect('user_dashboard')
 
     if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            product = form.save(commit=False)
-            product.vendor = request.user  # Assign the logged-in vendor
-            product.save()
-            return redirect('vendor_dashboard')  # Redirect after adding product
+        name = request.POST.get('name')
+        price = request.POST.get('price')
+        quantity = request.POST.get('quantity')
+        image = request.FILES.get('image')
+        description = request.POST.get('description')
+        category_id = request.POST.get('category')
 
-    else:
-        form = ProductForm()
+        # Manual validation (ensure required fields are filled)
+        if not name or not price or not quantity or not image or not category_id:
+            return render(request, 'products/vendor_dashboard.html', {
+                'error_message': 'Please fill out all fields correctly.'
+            })
+        
+        # Check if the price and quantity are valid numbers
+        try:
+            price = float(price)
+            quantity = int(quantity)
+        except ValueError:
+            return render(request, 'products/vendor_dashboard.html', {
+                'error_message': 'Price and quantity must be valid numbers.'
+            })
+
+        # Find the category
+        category = Category.objects.get(id=category_id)
+
+        # Create and save the product
+        product = Product(
+            name=name,
+            price=price,
+            quantity=quantity,
+            image=image,
+            description=description,
+            category=category,
+            vendor=request.user  # Assign the logged-in vendor
+        )
+        product.save()
+
+        return redirect('vendor_dashboard')  # Redirect after adding product
 
     # Fetch only the products added by the logged-in vendor
     products = Product.objects.filter(vendor=request.user)
 
-    return render(request, 'products/vendor_dashboard.html', {'form': form, 'products': products})
-def vendor_products(request):
-    # Fetch products that belong to the current logged-in vendor
-    products = Product.objects.filter(vendor=request.user)
-    
-    context = {
-        'products': products  # Pass the products to the template
-    }
-    return render(request, 'vendor_products.html', context)
+    # Fetch categories for the category dropdown
+    categories = Category.objects.all()
+
+    return render(request, 'products/vendor_dashboard.html', {
+        'products': products,
+        'categories': categories
+    })
 @login_required
 def edit_product(request, product_id):
     # Get the product that the logged-in vendor is trying to edit
     product = get_object_or_404(Product, id=product_id, vendor=request.user)
 
     if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES, instance=product)
-        if form.is_valid():
-            form.save()  # Save the updated product details
-            return redirect('vendor_dashboard')  # Redirect to vendor dashboard after saving
+        # Get POST data for fields
+        name = request.POST.get('name')
+        price = request.POST.get('price')
+        quantity = request.POST.get('quantity')
+        description = request.POST.get('description')
+        category_id = request.POST.get('category')
+        image = request.FILES.get('image')
+
+        # Validate input fields
+        if not name or not price or not quantity or not category_id:
+            return render(request, 'products/edit_product.html', {
+                'error_message': 'Please fill out all fields correctly.',
+                'product': product
+            })
+
+        # Check if the price and quantity are valid numbers
+        try:
+            price = float(price)
+            quantity = int(quantity)
+        except ValueError:
+            return render(request, 'products/edit_product.html', {
+                'error_message': 'Price and quantity must be valid numbers.',
+                'product': product
+            })
+
+        # Find the category
+        category = Category.objects.get(id=category_id)
+
+        # Update the product with the new data
+        product.name = name
+        product.price = price
+        product.quantity = quantity
+        product.description = description
+        product.category = category
+
+        # Only update the image if a new one was provided
+        if image:
+            product.image = image
+
+        product.save()  # Save the updated product details
+
+        return redirect('vendor_dashboard')  # Redirect to vendor dashboard after saving
 
     else:
-        form = ProductForm(instance=product)  # Pre-fill the form with the existing product data
-
-    return render(request, 'products/edit_product.html', {'form': form})
+        # Just display the existing product's details for the vendor to edit
+        categories = Category.objects.all()  # Get available categories for the dropdown
+        return render(request, 'products/edit_product.html', {
+            'product': product,
+            'categories': categories
+        })
 @login_required
 def delete_product(request, product_id):
     product = get_object_or_404(Product, id=product_id, vendor=request.user)  # Ensure only the vendor can delete their product
@@ -253,14 +321,16 @@ def delete_product(request, product_id):
         product.delete()  # Delete the product
         return redirect('vendor_dashboard')  # Redirect to vendor dashboard after deletion
 
+    # If the request method is GET, show the confirmation page
     return render(request, 'products/delete_product.html', {'product': product})
+
 @login_required
 def search(request):
-    query = request.GET.get('q', '')  # Get search query from URL parameters
+    query = request.GET.get('q', '').strip()
+
     if query:
-        # Search for products by name, description, or category
         products = Product.objects.filter(name__icontains=query) | Product.objects.filter(description__icontains=query)
     else:
-        products = Product.objects.all()  # Show all products if no search query
+        products = Product.objects.all()
 
     return render(request, 'products/search_results.html', {'products': products, 'query': query})

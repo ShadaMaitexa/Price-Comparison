@@ -17,7 +17,6 @@ urlpatterns = [
 
     # Vendor & User Dashboards
     path('vendor-dashboard/', views.vendor_dashboard, name="vendor_dashboard"),
-    path('vendor-products/', views.vendor_products, name='vendor_products'), 
     path('user-dashboard/', views.user_dashboard, name="user_dashboard"),
     path('delete-user/<int:user_id>/', views.delete_user, name='delete_user'),  # Delete user
     path('delete-vendor/<int:vendor_id>/', views.delete_vendor, name='delete_vendor'),  # Delete shop/vendor

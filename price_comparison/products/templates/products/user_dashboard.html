@@ -1,47 +1,61 @@
-<h1>Available Products</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard | E-Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Available Products</h1>
 
-<!-- Search form -->
-<form method="GET" action="{% url 'user_dashboard' %}">
-    <input type="text" name="q" value="{{ query }}" placeholder="Search for products..." />
-    <button type="submit">Search</button>
-</form>
+        <!-- Search Form -->
+        <form method="GET" action="{% url 'user_dashboard' %}">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search for products..." />
+            <button type="submit"><i class="fa fa-search"></i> Search</button>
+        </form>
 
-<!-- Category filter form -->
-<form method="GET" action="{% url 'user_dashboard' %}">
-    <label for="category">Category:</label>
-    <select name="category" id="category">
-        <option value="">All Categories</option>
-        {% for category in categories %}
-            <option value="{{ category.id }}" {% if category.id == selected_category %}selected{% endif %}>
-                {{ category.name }}
-            </option>
-        {% endfor %}
-    </select>
-    <button type="submit">Filter</button>
-</form>
+        <!-- Category Filter -->
+        <form method="GET" action="{% url 'user_dashboard' %}">
+            <label for="category">Category:</label>
+            <select name="category" id="category">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category.id|stringformat:"s" == selected_category|stringformat:"s" %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit"><i class="fa fa-filter"></i> Filter</button>
+        </form>
 
-<!-- Product List -->
-<table>
-    <thead>
-        <tr>
-            <th>Product Name</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Vendor</th>
-            <th>Image</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for product in products %}
-            <tr>
-                <td>{{ product.name }}</td>
-                <td>${{ product.price }}</td>
-                <td>{{ product.quantity }}</td>
-                <td>{{ product.vendor.username }}</td>  <!-- Display vendor username -->
-                <td><img src="{{ product.image.url }}" alt="{{ product.name }}" width="100"></td>
-            </tr>
-        {% empty %}
-            <tr><td colspan="5">No products available.</td></tr>
-        {% endfor %}
-    </tbody>
-</table>
+        <!-- Product List -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Vendor</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>${{ product.price }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.vendor.username }}</td>
+                        <td><img src="{{ product.image.url }}" alt="{{ product.name }}" width="100"></td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5">No products available.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

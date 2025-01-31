@@ -1,13 +1,22 @@
-{% extends 'products/base.html' %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | E-Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
     <div class="container">
         <h2>Login</h2>
 
+        <!-- Display messages -->
         {% if messages %}
             <div class="messages">
                 {% for message in messages %}
-                    <p class="error-message">{{ message }}</p>
+                    <p class="message {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</p>
                 {% endfor %}
             </div>
         {% endif %}
@@ -15,14 +24,17 @@
         <form method="post" class="login-form">
             {% csrf_token %}
             <div class="form-group">
-                <input type="text" name="username" placeholder="Username" required>
+                <label for="username"><i class="fa fa-user"></i> Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required value="{{ request.POST.username }}">
             </div>
             <div class="form-group">
-                <input type="password" name="password" placeholder="Password" required>
+                <label for="password"><i class="fa fa-lock"></i> Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
             </div>
-            <button type="submit">Login</button>
+            <button type="submit"><i class="fa fa-sign-in-alt"></i> Login</button>
         </form>
 
         <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
     </div>
-{% endblock %}
+</body>
+</html>

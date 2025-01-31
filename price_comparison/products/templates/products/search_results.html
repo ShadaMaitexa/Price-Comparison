@@ -1,31 +1,47 @@
-<h1>Search Results</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results | E-Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Search Results</h1>
 
-<form method="GET" action="{% url 'search' %}">
-    <input type="text" name="q" value="{{ query }}" placeholder="Search for products..." />
-    <button type="submit">Search</button>
-</form>
+        <!-- Search Form -->
+        <form method="GET" action="{% url 'search' %}">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search for products..." />
+            <button type="submit"><i class="fa fa-search"></i> Search</button>
+        </form>
 
-<table>
-    <thead>
-        <tr>
-            <th>Product Name</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Vendor</th>
-            <th>Image</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for product in products %}
-            <tr>
-                <td>{{ product.name }}</td>
-                <td>${{ product.price }}</td>
-                <td>{{ product.quantity }}</td>
-                <td>{{ product.vendor.username }}</td>  <!-- Display vendor username -->
-                <td><img src="{{ product.image.url }}" alt="{{ product.name }}" width="100"></td>
-            </tr>
-        {% empty %}
-            <tr><td colspan="5">No products found matching your search.</td></tr>
-        {% endfor %}
-    </tbody>
-</table>
+        <!-- Product List -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Vendor</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>${{ product.price }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.vendor.username }}</td>
+                        <td><img src="{{ product.image.url }}" alt="{{ product.name }}" width="100"></td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5">No products found matching your search.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

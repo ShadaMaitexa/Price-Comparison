@@ -1,17 +1,32 @@
-{% extends 'products/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - Product Detail</title>
+    <!-- Add your CSS link here, for example: -->
+    <link rel="stylesheet" href="/static/css/style.css"> 
+</head>
+<body>
+
+
 
 {% block content %}
-    <h2>Product Details</h2>
-    <h3>{{ product.name }}</h3>
-    <p><strong>Price:</strong> ${{ product.price }}</p>
-    <p><strong>Description:</strong> {{ product.description }}</p>
-    <p><strong>Category:</strong> {{ product.category.name }}</p>
-    <p><strong>Stock Quantity:</strong> {{ product.quantity }}</p>
-    <p><strong>Vendor:</strong> {{ product.vendor.username }}</p>
+    <h1>{{ product.name }}</h1>
+    
+    <div>
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" width="300">
+    </div>
 
-    {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" width="200">
-    {% endif %}
+    <div>
+        <p><strong>Price:</strong> ${{ product.price }}</p>
+        <p><strong>Description:</strong> {{ product.description }}</p>
+        <p><strong>Stock:</strong> {{ product.quantity }}</p>
+        <p><strong>Vendor:</strong> {{ product.vendor.username }}</p> <!-- Assuming product.vendor is related to User model -->
+    </div>
 
-    <a href="{% url 'admin_dashboard' %}">Back to Admin Dashboard</a>
+    <a href="{% url 'admin_dashboard' %}">Back to Product List</a>
 {% endblock %}
+
+</body>
+</html>

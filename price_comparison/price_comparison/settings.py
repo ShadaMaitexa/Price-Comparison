@@ -72,6 +72,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'price_comparison.wsgi.application'
 
+ADMIN_USERNAME = "admin123"
+ADMIN_PASSWORD = "admin123"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
