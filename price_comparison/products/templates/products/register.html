@@ -1,25 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | E-Shop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'images/background.jpg' %}") no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Container */
+        .container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h2 {
+            color: rgb(27, 98, 152);
+            margin-bottom: 20px;
+        }
+
+        /* Messages */
+        .messages {
+            margin-bottom: 15px;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            background: lightcoral;
+            color: white;
+        }
+
+        /* Form */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            text-align: left;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: rgb(27, 98, 152);
+        }
+
+        .form-group i {
+            position: absolute;
+            top: 35px;
+            left: 10px;
+            color: rgb(27, 98, 152);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 90%;
+            padding: 10px 10px 10px 35px;
+            border: 2px solid rgb(27, 98, 152);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: rgb(27, 98, 152);
+        }
+
+        /* Button */
+        button {
+            background: rgb(27, 98, 152);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: rgb(27, 98, 152);
+        }
+
+        /* Links */
+        p {
+            margin-top: 10px;
+            color: white;
+        }
+
+        p a {
+            color: rgb(27, 98, 152);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        p a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile-Friendly Design */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            .form-group input,
+            .form-group select {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container register-container">
-        <h2>Create an Account</h2>
+        <h2><i class="fa fa-user-plus"></i> Create an Account</h2>
         
         {% if messages %}
             <div class="messages">
                 {% for message in messages %}
-                    <p class="error-message">{{ message }}</p>
+                    <p class="message {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</p>
                 {% endfor %}
             </div>
         {% endif %}
 
-        <form method="post">
+        <form method="post" class="login-form">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username"><i class="fa fa-user"></i> Username</label>
@@ -28,6 +165,21 @@
             <div class="form-group">
                 <label for="email"><i class="fa fa-envelope"></i> Email</label>
                 <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone"><i class="fa fa-phone"></i> Phone Number</label>
+                <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
+            </div>
+            <div class="form-group">
+                <label for="user_type"><i class="fa fa-user-tag"></i> I am a:</label>
+                <select id="user_type" name="user_type" required>
+                    <option value="user">User</option>
+                    <option value="vendor">Vendor</option>
+                </select>
+            </div>
+            <div class="form-group" id="shop_name_group" style="display: none;">
+                <label for="shop_name"><i class="fa fa-store"></i> Shop Name</label>
+                <input type="text" id="shop_name" name="shop_name" placeholder="Enter your shop name">
             </div>
             <div class="form-group">
                 <label for="password"><i class="fa fa-lock"></i> Password</label>
@@ -42,5 +194,19 @@
 
         <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
     </div>
+
+    <script>
+        // Show shop name field if the user selects 'vendor'
+        document.getElementById('user_type').addEventListener('change', function() {
+            const shopNameGroup = document.getElementById('shop_name_group');
+            if (this.value === 'vendor') {
+                shopNameGroup.style.display = 'block';
+                document.getElementById('shop_name').setAttribute('required', 'true');
+            } else {
+                shopNameGroup.style.display = 'none';
+                document.getElementById('shop_name').removeAttribute('required');
+            }
+        });
+    </script>
 </body>
 </html>

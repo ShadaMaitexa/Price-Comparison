@@ -1,32 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.name }} - Product Detail</title>
-    <!-- Add your CSS link here, for example: -->
-    <link rel="stylesheet" href="/static/css/style.css"> 
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'images/background.jpg' %}") no-repeat center center/cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 60%;
+            max-width: 800px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: rgb(27, 98, 152);
+            margin-bottom: 20px;
+        }
+
+        img {
+            max-width: 20%;
+            border-radius: 10px;
+        }
+
+        .product-details {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .product-details p {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .product-details strong {
+            color: rgb(27, 98, 152);
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: rgb(27, 98, 152);
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile-friendly design */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .product-details p {
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>{{ product.name }}</h1>
 
+        <div>
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        </div>
 
+        <div class="product-details">
+            <p><strong>Price:</strong> ${{ product.price }}</p>
+            <p><strong>Description:</strong> {{ product.description }}</p>
+            <p><strong>Stock:</strong> {{ product.quantity }}</p>
+            <p><strong>Vendor:</strong> {{ product.vendor.username }}</p> <!-- Assuming product.vendor is related to User model -->
+        </div>
 
-{% block content %}
-    <h1>{{ product.name }}</h1>
-    
-    <div>
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" width="300">
+        <a href="{% url 'admin_dashboard' %}" class="back-link">Back to Product List</a>
     </div>
-
-    <div>
-        <p><strong>Price:</strong> ${{ product.price }}</p>
-        <p><strong>Description:</strong> {{ product.description }}</p>
-        <p><strong>Stock:</strong> {{ product.quantity }}</p>
-        <p><strong>Vendor:</strong> {{ product.vendor.username }}</p> <!-- Assuming product.vendor is related to User model -->
-    </div>
-
-    <a href="{% url 'admin_dashboard' %}">Back to Product List</a>
-{% endblock %}
-
 </body>
 </html>

@@ -4,14 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Price Comparison</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eef2ff;
+            color: #333;
+            padding-top: 60px; /* To prevent content from being hidden under the fixed header */
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px 0;
+            position: fixed; /* Fixes the navbar at the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Ensures it stays on top of other elements */
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #9391a3;
+        }
+
+        main {
+            padding: 40px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav>
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'login' %}">Login</a>
-            <a href="{% url 'admin_login' %}">AdminLogin</a>
+            <a href="{% url 'admin_login' %}">Admin Login</a>
             <a href="{% url 'register' %}">Register</a>
         </nav>
     </header>

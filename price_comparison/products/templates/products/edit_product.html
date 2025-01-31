@@ -1,45 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Product</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'images/background.jpg' %}") no-repeat center center/cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 60%;
+            max-width: 800px;
+            background-color: rgba(0, 0, 0, 0.7);
+            
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+            color: rgb(27, 98, 152);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 2px solid rgb(27, 98, 152);
+            font-size: 16px;
+            color: white;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: rgb(27, 98, 152);
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: rgb(21, 84, 119);
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: rgb(27, 98, 152);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile-friendly design */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            input, select, textarea {
+                width: 100%;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Edit Product: {{ product.name }}</h1>
+    <div class="container">
+        <h1>Edit Product: {{ product.name }}</h1>
 
-    {% if error_message %}
-        <p class="error">{{ error_message }}</p>
-    {% endif %}
+        {% if error_message %}
+            <p class="error">{{ error_message }}</p>
+        {% endif %}
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        
-        <label for="id_name">Name:</label>
-        <input type="text" name="name" value="{{ product.name }}" required>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <label for="id_name">Name:</label>
+            <input type="text" name="name" value="{{ product.name }}" required>
 
-        <label for="id_price">Price:</label>
-        <input type="number" step="0.01" name="price" value="{{ product.price }}" required>
+            <label for="id_price">Price:</label>
+            <input type="number" step="0.01" name="price" value="{{ product.price }}" required>
 
-        <label for="id_quantity">Stock:</label>
-        <input type="number" name="quantity" value="{{ product.quantity }}" required>
+            <label for="id_quantity">Stock:</label>
+            <input type="number" name="quantity" value="{{ product.quantity }}" required>
 
-        <label for="id_description">Description:</label>
-        <textarea name="description">{{ product.description }}</textarea>
+            <label for="id_description">Description:</label>
+            <textarea name="description">{{ product.description }}</textarea>
 
-        <label for="id_category">Category:</label>
-        <select name="category" required>
-            {% for category in categories %}
-                <option value="{{ category.id }}" {% if category.id == product.category.id %}selected{% endif %}>{{ category.name }}</option>
-            {% endfor %}
-        </select>
+            <label for="id_category">Category:</label>
+            <select name="category" required>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category.id == product.category.id %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
 
-        <label for="id_image">Image:</label>
-        <input type="file" name="image">
+            <label for="id_image">Image:</label>
+            <input type="file" name="image">
 
-        <button type="submit">Save Changes</button>
-    </form>
+            <button type="submit">Save Changes</button>
+        </form>
 
-    <a href="{% url 'vendor_dashboard' %}">Back to Vendor Dashboard</a>
+        <a href="{% url 'vendor_dashboard' %}" class="back-link">Back to Vendor Dashboard</a>
+    </div>
 </body>
 </html>

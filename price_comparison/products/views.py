@@ -103,7 +103,7 @@ def admin_login(request):
 
     return render(request, "products/admin_login.html")
 #  Admin Dashboard (Restrict Access)
-@login_required
+@login_required(login_url='/admin-login/')
 def admin_dashboard(request):
     if not request.session.get('is_admin'):
         messages.error(request, "You must log in as an admin first!")

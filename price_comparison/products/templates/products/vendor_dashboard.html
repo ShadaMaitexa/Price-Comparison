@@ -1,11 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendor Dashboard | E-Shop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'images/background.jpg' %}") no-repeat center center/cover;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color:white;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 30px;
+        }
+
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: rgb(27, 98, 152);
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"],
+        textarea,
+        select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid rgb(27, 98, 152);
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: rgb(27, 98, 152);
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: rgb(21, 84, 119);
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid rgb(27, 98, 152);
+            text-align: left;
+        }
+
+        th, td {
+            padding: 15px;
+        }
+
+        th {
+            background-color: rgb(27, 98, 152);
+            color: white;
+        }
+
+        td img {
+            border-radius: 5px;
+            max-width: 100px;
+        }
+
+        td a {
+            text-decoration: none;
+            font-size: 18px;
+            margin: 0 10px;
+        }
+
+        td a.edit {
+            color: #007bff; /* Blue for edit */
+        }
+
+        td a.edit:hover {
+            color: #0056b3;
+        }
+
+        td a.delete {
+            color: #dc3545; /* Red for delete */
+        }
+
+        td a.delete:hover {
+            color: #c82333;
+        }
+
+        /* Mobile-friendly design */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+
+            form {
+                flex-direction: column;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            input[type="file"],
+            textarea,
+            select {
+                width: 100%;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            td img {
+                max-width: 80px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -54,7 +207,7 @@
                     <th>Price</th>
                     <th>Stock</th>
                     <th>Image</th>
-                    <th>Description</th>  <!-- Add a new column for description -->
+                    <th>Description</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -64,16 +217,20 @@
                         <td>{{ product.name }}</td>
                         <td>${{ product.price }}</td>
                         <td>{{ product.quantity }}</td>
-                        <td><img src="{{ product.image.url }}" alt="{{ product.name }}" width="100"></td>
+                        <td><img src="{{ product.image.url }}" alt="{{ product.name }}"></td>
                         <td>
-                            <a href="#description-{{ product.id }}" data-toggle="collapse">View Description</a>
+                            
                             <div id="description-{{ product.id }}" class="collapse">
-                                <p>{{ product.description }}</p>  <!-- Assuming you have a description field in your Product model -->
+                                <p>{{ product.description }}</p>
                             </div>
                         </td>
                         <td>
-                            <a href="{% url 'edit_product' product.id %}">Edit</a> |
-                            <a href="{% url 'delete_product' product.id %}">Delete</a>
+                            <a href="{% url 'edit_product' product.id %}" class="edit">
+                                <i class="fas fa-edit"></i>
+                            </a> |
+                            <a href="{% url 'delete_product' product.id %}" class="delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
                         </td>
                     </tr>
                 {% empty %}

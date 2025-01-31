@@ -1,16 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | E-Shop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'images/background.jpg' %}") no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        /* Container */
+        .container {
+            background:rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h2 {
+            color: rgb(27, 98, 152);
+            margin-bottom: 20px;
+        }
+
+        /* Messages */
+        .messages {
+            margin-bottom: 15px;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            background: lightcoral;
+            color: white;
+        }
+
+        /* Form */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            text-align: left;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: rgb(27, 98, 152);
+        }
+
+        .form-group i {
+            position: absolute;
+            top: 35px;
+            left: 10px;
+            color: rgb(27, 98, 152);
+        }
+
+        .form-group input {
+            width: 90%;
+            padding: 10px 10px 10px 35px;
+            border: 2px solid rgb(27, 98, 152);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: rgb(27, 98, 152);
+        }
+
+        /* Button */
+        button {
+            background: rgb(27, 98, 152);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: rgb(27, 98, 152);
+        }
+
+        /* Links */
+        p {
+            margin-top: 10px;
+        }
+
+        p a {
+            color:rgb(27, 98, 152);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        p a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h2>Admin Login</h2>
+        <h2><i class="fa fa-user-circle"></i> Admin Login</h2>
 
+        <!-- Display messages -->
         {% if messages %}
             <div class="messages">
                 {% for message in messages %}
