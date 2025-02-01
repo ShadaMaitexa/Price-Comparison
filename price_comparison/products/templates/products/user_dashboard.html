@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +22,7 @@
             color: white;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
         h1 {
             color: rgb(27, 98, 152);
@@ -28,6 +30,60 @@
             font-size: 2.5rem;
             margin-bottom: 20px;
         }
+        /* Notification Icon Styles */
+        .notification-wrapper {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .notification-icon {
+            color: white;
+            font-size: 1.8rem;
+            position: relative;
+            cursor: pointer;
+        }
+        .notification-icon .badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+        }
+        .notification-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: #fff;
+            color: #000;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 1000;
+            padding: 10px;
+        }
+        .notification-dropdown div.notification-item {
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+        }
+        .notification-dropdown div.notification-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .notification-dropdown p {
+            margin: 0 0 5px 0;
+            font-size: 0.9rem;
+        }
+        .notification-dropdown a {
+            font-size: 0.9rem;
+            color: blue;
+            text-decoration: underline;
+        }
+        /* Filter form & table styling */
         form {
             display: flex;
             flex-wrap: wrap;
@@ -100,11 +156,37 @@
             td img {
                 max-width: 80px;
             }
+            .notification-wrapper {
+                top: 10px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Notification Icon -->
+        <div class="notification-wrapper">
+            <span class="notification-icon" id="notificationIcon">
+                <i class="fa fa-bell"></i>
+                {% if notifications and notifications|length > 0 %}
+                    <span class="badge">{{ notifications|length }}</span>
+                {% endif %}
+            </span>
+            <div class="notification-dropdown" id="notificationDropdown">
+                {% if notifications and notifications|length > 0 %}
+                    {% for note in notifications %}
+                        <div class="notification-item">
+                            <p>{{ note.message }}</p>
+                            <a href="{% url 'product_detail' note.product.id %}">View</a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No new notifications.</p>
+                {% endif %}
+            </div>
+        </div>
+
         <h1>Available Products</h1>
 
         <!-- Combined Filter Form -->
@@ -159,5 +241,27 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        // Toggle the notification dropdown when the bell icon is clicked.
+        document.getElementById('notificationIcon').addEventListener('click', function(e) {
+            e.preventDefault();
+            var dropdown = document.getElementById('notificationDropdown');
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+            } else {
+                dropdown.style.display = 'block';
+            }
+        });
+
+        // Optional: Hide the notification dropdown when clicking outside of it.
+        document.addEventListener('click', function(event) {
+            var icon = document.getElementById('notificationIcon');
+            var dropdown = document.getElementById('notificationDropdown');
+            if (!icon.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

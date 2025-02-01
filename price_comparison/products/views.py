@@ -179,6 +179,8 @@ def delete_vendor(request, vendor_id):
 def logout_view(request):
     logout(request)
     return redirect("login")
+# products/views.py
+
 @login_required
 def user_dashboard(request):
     query = request.GET.get('q', '').strip()           # Get search query
@@ -204,12 +206,17 @@ def user_dashboard(request):
     elif price_filter == 'high_to_low':
         products = products.order_by('-price')
 
+    # Fetch notifications (for simplicity, all unread notifications)
+    from .models import Notification  # Or import at the top of the file
+    notifications = Notification.objects.filter(is_read=False).order_by('-created_at')
+
     context = {
         "products": products,
         "query": query,
         "categories": categories,
         "selected_category": category_id,  # To preserve the selected category
         "selected_price": price_filter,    # To preserve the selected price filter
+        "notifications": notifications,    # Pass notifications to the template
     }
     return render(request, "products/user_dashboard.html", context)
 
@@ -269,6 +276,8 @@ def vendor_dashboard(request):
         'products': products,
         'categories': categories
     })
+# products/views.py
+
 @login_required
 def edit_product(request, product_id):
     # Get the product that the logged-in vendor is trying to edit
@@ -292,7 +301,7 @@ def edit_product(request, product_id):
 
         # Check if the price and quantity are valid numbers
         try:
-            price = float(price)
+            new_price = float(price)
             quantity = int(quantity)
         except ValueError:
             return render(request, 'products/edit_product.html', {
@@ -303,9 +312,12 @@ def edit_product(request, product_id):
         # Find the category
         category = Category.objects.get(id=category_id)
 
+        # Check if the price has changed before updating
+        old_price = product.price
+
         # Update the product with the new data
         product.name = name
-        product.price = price
+        product.price = new_price
         product.quantity = quantity
         product.description = description
         product.category = category
@@ -316,6 +328,14 @@ def edit_product(request, product_id):
 
         product.save()  # Save the updated product details
 
+        # If the price has changed, create a notification
+        if new_price != old_price:
+            from .models import Notification  # Import here or at the top of the file
+            Notification.objects.create(
+                product=product,
+                message=f"The price for '{product.name}' has changed from ${old_price} to ${new_price}."
+            )
+
         return redirect('vendor_dashboard')  # Redirect to vendor dashboard after saving
 
     else:
@@ -325,6 +345,7 @@ def edit_product(request, product_id):
             'product': product,
             'categories': categories
         })
+
 @login_required
 def delete_product(request, product_id):
     product = get_object_or_404(Product, id=product_id, vendor=request.user)  # Ensure only the vendor can delete their product

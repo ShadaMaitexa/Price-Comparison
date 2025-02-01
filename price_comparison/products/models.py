@@ -41,3 +41,11 @@ class VendorProfile(models.Model):
 
     def __str__(self):
         return self.shop_name
+class Notification(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    message = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)  # You can use this later to mark notifications as seen
+
+    def __str__(self):
+        return self.message
