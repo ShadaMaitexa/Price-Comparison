@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .models import UserType, VendorProfile,Product,Category
 from django.contrib.auth.models import User
@@ -334,7 +335,6 @@ def delete_product(request, product_id):
 
     # If the request method is GET, show the confirmation page
     return render(request, 'products/delete_product.html', {'product': product})
-
 @login_required
 def search(request):
     query = request.GET.get('q', '').strip()
