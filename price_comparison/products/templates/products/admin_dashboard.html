@@ -12,6 +12,7 @@
             background: url("{% static 'images/background.jpg' %}") no-repeat center center/cover;
             margin: 0;
             padding: 0;
+            background-size: cover;
         }
 
         /* Admin Dashboard Container */
@@ -90,6 +91,54 @@
 
         button:hover {
             background-color: rgb(20, 75, 120);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 15px;
+            }
+
+            table, th, td {
+                font-size: 14px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            .logout-btn {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h2 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            .logout-btn {
+                font-size: 13px;
+                padding: 7px 12px;
+            }
+
+            table, th, td {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            button {
+                padding: 4px 8px;
+            }
         }
     </style>
 </head>

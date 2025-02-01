@@ -48,6 +48,34 @@
             padding: 40px;
             text-align: center;
         }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav a {
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+
+            main {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav a {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+
+            main {
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>

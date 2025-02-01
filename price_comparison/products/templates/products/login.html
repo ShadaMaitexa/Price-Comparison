@@ -17,7 +17,7 @@
             height: 100vh;
             margin: 0;
         }
-        
+
         /* Container */
         .container {
             background: rgba(0, 0, 0, 0.6);
@@ -71,20 +71,20 @@
         }
 
         .form-group input {
-            width: 90%;
+            width: 100%;
             padding: 10px 10px 10px 35px;
-            border: 2px solid  rgb(27, 98, 152);;
+            border: 2px solid  rgb(27, 98, 152);
             border-radius: 5px;
             outline: none;
         }
 
         .form-group input:focus {
-            border-color: rgb(27, 98, 152);;
+            border-color: rgb(27, 98, 152);
         }
 
         /* Button */
         button {
-            background: rgb(27, 98, 152);;
+            background: rgb(27, 98, 152);
             color: white;
             border: none;
             padding: 12px;
@@ -99,7 +99,7 @@
         }
 
         button:hover {
-            background:  rgb(27, 98, 152);;
+            background: rgb(21, 84, 119);
         }
 
         /* Links */
@@ -109,13 +109,53 @@
         }
 
         p a {
-             color: rgb(27, 98, 152);;
+            color: rgb(27, 98, 152);
             text-decoration: none;
             font-weight: bold;
         }
 
         p a:hover {
             text-decoration: underline;
+        }
+
+        /* Mobile-friendly design */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 85%;
+                padding: 25px;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .form-group input {
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .form-group input {
+                font-size: 12px;
+            }
+
+            button {
+                font-size: 12px;
+                padding: 10px;
+            }
         }
     </style>
 </head>

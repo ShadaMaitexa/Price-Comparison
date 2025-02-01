@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,10 +134,24 @@
             border-radius: 5px;
             max-width: 100px;
         }
+        /* Media Queries for Responsiveness */
+        @media screen and (max-width: 1024px) {
+            .container {
+                width: 90%;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
         @media screen and (max-width: 768px) {
             .container {
                 width: 95%;
                 padding: 15px;
+            }
+            h1 {
+                font-size: 1.8rem;
             }
             form {
                 flex-direction: column;
@@ -159,6 +172,29 @@
             .notification-wrapper {
                 top: 10px;
                 right: 10px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .container {
+                width: 100%;
+                padding: 10px;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+            input[type="text"], select {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            button {
+                width: 100%;
+            }
+            table {
+                font-size: 12px;
+            }
+            td img {
+                max-width: 60px;
             }
         }
     </style>

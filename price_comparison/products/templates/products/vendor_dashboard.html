@@ -150,12 +150,30 @@
                 width: 100%;
             }
 
+            button {
+                width: 100%;
+            }
+
             table {
                 font-size: 14px;
             }
 
             td img {
                 max-width: 80px;
+            }
+
+            td a {
+                font-size: 16px;
+                display: inline-block;
+                margin: 0;
+            }
+
+            td a.edit, td a.delete {
+                padding: 5px;
+            }
+
+            .error-message {
+                font-size: 14px;
             }
         }
     </style>
@@ -219,7 +237,6 @@
                         <td>{{ product.quantity }}</td>
                         <td><img src="{{ product.image.url }}" alt="{{ product.name }}"></td>
                         <td>
-                            
                             <div id="description-{{ product.id }}" class="collapse">
                                 <p>{{ product.description }}</p>
                             </div>

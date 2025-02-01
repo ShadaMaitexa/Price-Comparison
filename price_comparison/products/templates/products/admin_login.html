@@ -17,7 +17,7 @@
             height: 100vh;
             margin: 0;
         }
-        
+
         /* Container */
         .container {
             background:rgba(0, 0, 0, 0.6);
@@ -115,6 +115,55 @@
 
         p a:hover {
             text-decoration: underline;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .form-group input {
+                width: 100%;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .messages {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h2 {
+                font-size: 22px;
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 10px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            .messages {
+                font-size: 12px;
+            }
         }
     </style>
 </head>

@@ -14,8 +14,8 @@
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            align-items: flex-start;
+            min-height: 100vh;
         }
 
         .container {
@@ -85,6 +85,7 @@
         td img {
             border-radius: 5px;
             max-width: 100px;
+            height: auto;
         }
 
         td a {
@@ -128,6 +129,30 @@
 
             td img {
                 max-width: 80px;
+            }
+        }
+
+        /* Further optimization for small devices */
+        @media screen and (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            input[type="text"] {
+                width: 90%;
+                margin-bottom: 10px;
+            }
+
+            button {
+                width: 90%;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            td img {
+                max-width: 60px;
             }
         }
     </style>

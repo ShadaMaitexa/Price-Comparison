@@ -32,11 +32,14 @@
         h1 {
             color: rgb(27, 98, 152);
             margin-bottom: 20px;
+            font-size: 2.5rem;
         }
 
         img {
-            max-width: 20%;
+            max-width: 100%;
+            height: auto;
             border-radius: 10px;
+            margin-bottom: 20px;
         }
 
         .product-details {
@@ -73,12 +76,33 @@
                 padding: 20px;
             }
 
+            h1 {
+                font-size: 24px;
+            }
+
             .product-details p {
                 font-size: 14px;
             }
 
+            img {
+                max-width: 80%;
+                margin: 0 auto;
+                display: block;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
             h1 {
-                font-size: 24px;
+                font-size: 22px;
+            }
+
+            .product-details p {
+                font-size: 13px;
+            }
+
+            .container {
+                width: 95%;
+                padding: 15px;
             }
         }
     </style>
