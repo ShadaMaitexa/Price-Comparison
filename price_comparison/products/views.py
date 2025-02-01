@@ -178,28 +178,39 @@ def delete_vendor(request, vendor_id):
 def logout_view(request):
     logout(request)
     return redirect("login")
-
-# User Dashboard (Regular Users)
 @login_required
 def user_dashboard(request):
-    query = request.GET.get('q', '').strip()  # Get search query
-    category_id = request.GET.get('category', '')  # Get category filter
+    query = request.GET.get('q', '').strip()           # Get search query
+    category_id = request.GET.get('category', '')        # Get category filter
+    price_filter = request.GET.get('price', '')          # Get price order filter
 
-    categories = Category.objects.all()  # Get all categories for dropdown
-    products = Product.objects.all()  # Fetch all products initially
+    categories = Category.objects.all()                # Get all categories for dropdown
+    products = Product.objects.all()                   # Start with all products
 
+    # Apply search filter
     if query:
-        products = products.filter(name__icontains=query) | products.filter(description__icontains=query)
+        products = products.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
 
+    # Apply category filter
     if category_id:
         products = products.filter(category_id=category_id)
 
-    return render(request, "products/user_dashboard.html", {
+    # Apply price ordering filter
+    if price_filter == 'low_to_high':
+        products = products.order_by('price')
+    elif price_filter == 'high_to_low':
+        products = products.order_by('-price')
+
+    context = {
         "products": products,
         "query": query,
         "categories": categories,
-        "selected_category": category_id,  # Keep track of selected category
-    })
+        "selected_category": category_id,  # To preserve the selected category
+        "selected_price": price_filter,    # To preserve the selected price filter
+    }
+    return render(request, "products/user_dashboard.html", context)
 
 @login_required
 def vendor_dashboard(request):

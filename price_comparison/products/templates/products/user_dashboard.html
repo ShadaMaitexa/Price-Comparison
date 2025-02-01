@@ -13,7 +13,6 @@
             margin: 0;
             padding: 0;
         }
-
         .container {
             width: 80%;
             margin: 20px auto;
@@ -23,28 +22,31 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
         h1 {
             color: rgb(27, 98, 152);
             text-align: center;
             font-size: 2.5rem;
             margin-bottom: 20px;
         }
-
         form {
             display: flex;
-            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-bottom: 20px;
+            align-items: center;
         }
-
         input[type="text"], select {
             padding: 10px;
             border: 2px solid rgb(27, 98, 152);
             border-radius: 5px;
             font-size: 16px;
-            width: 40%;
         }
-
+        input[type="text"] {
+            flex: 1 1 200px;
+        }
+        select {
+            flex: 1 1 150px;
+        }
         button {
             padding: 10px 20px;
             background-color: rgb(27, 98, 152);
@@ -54,26 +56,21 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
         button:hover {
             background-color: rgb(27, 98, 152);
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-
         table, th, td {
             border: 1px solid rgb(27, 98, 152);
             text-align: left;
         }
-
         th, td {
             padding: 15px;
         }
-
         th {
             background-color: rgb(27, 98, 152);
             color: white;
@@ -91,19 +88,15 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
-
             input[type="text"], select {
                 width: 100%;
-                margin-bottom: 10px;
             }
             button {
                 width: 100%;
             }
-
             table {
                 font-size: 14px;
             }
-
             td img {
                 max-width: 80px;
             }
@@ -114,14 +107,11 @@
     <div class="container">
         <h1>Available Products</h1>
 
-        <!-- Search Form -->
+        <!-- Combined Filter Form -->
         <form method="GET" action="{% url 'user_dashboard' %}">
             <input type="text" name="q" value="{{ query }}" placeholder="Search for products..." />
-            <button type="submit"><i class="fa fa-search"></i> Search</button>
-        </form>
 
-        <!-- Category Filter -->
-        <form method="GET" action="{% url 'user_dashboard' %}">
+            <!-- Category Filter -->
             <select name="category" id="category">
                 <option value="">All Categories</option>
                 {% for category in categories %}
@@ -130,7 +120,15 @@
                     </option>
                 {% endfor %}
             </select>
-            <button type="submit"><i class="fa fa-filter"></i> Filter</button>
+
+            <!-- Price Filter -->
+            <select name="price" id="price">
+                <option value="">Sort by Price</option>
+                <option value="low_to_high" {% if selected_price == 'low_to_high' %}selected{% endif %}>Lowest to Highest</option>
+                <option value="high_to_low" {% if selected_price == 'high_to_low' %}selected{% endif %}>Highest to Lowest</option>
+            </select>
+
+            <button type="submit"><i class="fa fa-search"></i> Filter</button>
         </form>
 
         <!-- Product List -->
@@ -154,7 +152,9 @@
                         <td><img src="{{ product.image.url }}" alt="{{ product.name }}"></td>
                     </tr>
                 {% empty %}
-                    <tr><td colspan="5">No products available.</td></tr>
+                    <tr>
+                        <td colspan="5">No products available.</td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
