@@ -1,73 +1,467 @@
-{% extends 'products/base.html' %}
+<!DOCTYPE html>
+<html>
 
-{% load static %}  <!-- Load the static tag -->
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <link rel="shortcut icon" href="static/images/favicon.png" type="">
 
-{% block content %}
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: url('{% static "images/background.jpg" %}') no-repeat center center/cover;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
+  <title> Price Comparison </title>
 
-        .welcome-container {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 600px;
-            width: 90%;
-        }
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="static/css/bootstrap.css" />
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-        p {
-            font-size: 1.2rem;
-            margin-top: 10px;
-        }
+  <!--owl slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
 
-        /* Mobile-friendly design */
-        @media screen and (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
+  <!-- font awesome style -->
+  <link href="static/css/font-awesome.min.css" rel="stylesheet" />
 
-            p {
-                font-size: 1rem;
-            }
+  <!-- Custom styles for this template -->
+  <link href="static/css/style.css" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="static/css/responsive.css" rel="stylesheet" />
 
-            .welcome-container {
-                padding: 20px;
-            }
-        }
+</head>
 
-        @media screen and (max-width: 480px) {
-            h1 {
-                font-size: 1.6rem;
-            }
+<body>
 
-            p {
-                font-size: 0.9rem;
-            }
+  <div class="hero_area">
 
-            .welcome-container {
-                padding: 15px;
-            }
-        }
-    </style>
-
-    <div class="welcome-container">
-        <h1>Welcome to Price Comparison</h1>
-        <p>Find the best deals across multiple vendors and save money effortlessly!</p>
+    <div class="hero_bg_box">
+      <div class="bg_img_box">
+        <img src="static/images/hero-bg.png" alt="">
+      </div>
     </div>
-{% endblock %}
+
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="index.html">
+            <span>
+                Price Comparison
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  ">
+              <li class="nav-item active">
+                <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_login' %}"> Admin</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}">Regsiter</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+              </li>
+              
+              <form class="form-inline">
+                <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
+                  <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+              </form>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+    <!-- slider section -->
+    <!-- Chatbot Button --><!-- Chatbot Button -->
+<button id="chatbot-btn" style="position: fixed; bottom: 20px; right: 20px; padding: 12px 15px; background-color: rgb(27, 98, 152); color: white; border: none; border-radius: 50%; font-size: 1.5rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); cursor: pointer; transition: background-color 0.3s, transform 0.3s ease; z-index: 9999;">
+    <i class="fa fa-comment-alt"></i> Chat
+</button>
+
+<!-- Chatbot Modal -->
+<div id="chatbot" style="display: none; position: fixed; bottom: 0; right: 0; width: 30%; height: 60%; background-color: rgba(0, 0, 0, 0.8); z-index: 9998; border-top-left-radius: 10px; border-top-right-radius: 10px; box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);">
+    <button id="chatbot-close" style="position: absolute; top: 10px; right: 10px; font-size: 2rem; color: white; background: none; border: none; cursor: pointer; transition: color 0.3s ease;">&times;</button>
+    <iframe src="https://www.chatbase.co/chatbot-iframe/CECIW1wmOvVxdUHNSm519" width="100%" height="100%" frameborder="0"></iframe>
+</div>
+
+<script>
+    // Show chatbot modal
+    document.getElementById('chatbot-btn').addEventListener('click', function() {
+        document.getElementById('chatbot').style.display = 'block';
+    });
+
+    // Close chatbot modal
+    document.getElementById('chatbot-close').addEventListener('click', function() {
+        document.getElementById('chatbot').style.display = 'none';
+    });
+</script>
+
+    <section class="slider_section ">
+      <div id="customCarousel1" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="container ">
+              <div class="row">
+                <div class="col-md-6 ">
+                  <div class="detail-box">
+                    <h1>
+                      Crypto <br>
+                      Currency
+                    </h1>
+                    <p>
+                      Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic? Esse dicta aliquid error repudiandae earum suscipit fugiat molestias, veniam, vel architecto veritatis delectus repellat modi impedit sequi.
+                    </p>
+                    <div class="btn-box">
+                      <a href="" class="btn1">
+                        Read More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="img-box">
+                    <img src="static/images/slider-img.png" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item ">
+            <div class="container ">
+              <div class="row">
+                <div class="col-md-6 ">
+                  <div class="detail-box">
+                    <h1>
+                      Crypto <br>
+                      Currency
+                    </h1>
+                    <p>
+                      Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic? Esse dicta aliquid error repudiandae earum suscipit fugiat molestias, veniam, vel architecto veritatis delectus repellat modi impedit sequi.
+                    </p>
+                    <div class="btn-box">
+                      <a href="" class="btn1">
+                        Read More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="img-box">
+                    <img src="static/images/slider-img.png" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="container ">
+              <div class="row">
+                <div class="col-md-6 ">
+                  <div class="detail-box">
+                    <h1>
+                      Crypto <br>
+                      Currency
+                    </h1>
+                    <p>
+                      Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic? Esse dicta aliquid error repudiandae earum suscipit fugiat molestias, veniam, vel architecto veritatis delectus repellat modi impedit sequi.
+                    </p>
+                    <div class="btn-box">
+                      <a href="" class="btn1">
+                        Read More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="img-box">
+                    <img src="static/images/slider-img.png" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ol class="carousel-indicators">
+          <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
+          <li data-target="#customCarousel1" data-slide-to="1"></li>
+          <li data-target="#customCarousel1" data-slide-to="2"></li>
+        </ol>
+      </div>
+
+    </section>
+    <!-- end slider section -->
+  </div>
+
+
+  <!-- service section -->
+
+  <section class="service_section layout_padding">
+    <div class="service_container">
+      <div class="container ">
+        <div class="heading_container heading_center">
+          <h2>
+            Our <span>Services</span>
+          </h2>
+          <p>
+            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration
+          </p>
+        </div>
+        <div class="row">
+          <div class="col-md-4 ">
+            <div class="box ">
+              <div class="img-box">
+                <img src="static/images/s1.png" alt="">
+              </div>
+              <div class="detail-box">
+                <h5>
+                  Currency Wallet
+                </h5>
+                <p>
+                  fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                  The
+                  point of using
+                </p>
+                <a href="">
+                  Read More
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 ">
+            <div class="box ">
+              <div class="img-box">
+                <img src="static/images/s2.png" alt="">
+              </div>
+              <div class="detail-box">
+                <h5>
+                  Security Storage
+                </h5>
+                <p>
+                  fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                  The
+                  point of using
+                </p>
+                <a href="">
+                  Read More
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 ">
+            <div class="box ">
+              <div class="img-box">
+                <img src="static/images/s3.png" alt="">
+              </div>
+              <div class="detail-box">
+                <h5>
+                  Expert Support
+                </h5>
+                <p>
+                  fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                  The
+                  point of using
+                </p>
+                <a href="">
+                  Read More
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="btn-box">
+          <a href="">
+            View All
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end service section -->
+
+
+  <!-- about section -->
+
+
+  <!-- team section -->
+  <section class="team_section layout_padding">
+    <div class="container-fluid">
+      <div class="heading_container heading_center">
+        <h2 class="">
+          Our <span> Team</span>
+        </h2>
+      </div>
+
+      <div class="team_container">
+        <div class="row">
+          <div class="col-lg-3 col-sm-6">
+            <div class="box ">
+              <div class="img-box">
+                <img src="static/images/team-1.jpg" class="img1" alt="">
+              </div>
+              <div class="detail-box">
+                <h5>
+                  Joseph Brown
+                </h5>
+                <p>
+                  Marketing Head
+                </p>
+              </div>
+              <div class="social_box">
+                <a href="#">
+                  <i class="fa fa-facebook" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-linkedin" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-instagram" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-youtube-play" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-sm-6">
+            <div class="box ">
+              <div class="img-box">
+                <img src="static/images/team-2.jpg" class="img1" alt="">
+              </div>
+              <div class="detail-box">
+                <h5>
+                  Nancy White
+                </h5>
+                <p>
+                  Marketing Head
+                </p>
+              </div>
+              <div class="social_box">
+                <a href="#">
+                  <i class="fa fa-facebook" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-linkedin" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-instagram" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-youtube-play" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-sm-6">
+            <div class="box ">
+              <div class="img-box">
+                <img src="static/images/team-3.jpg" class="img1" alt="">
+              </div>
+              <div class="detail-box">
+                <h5>
+                  Earl Martinez
+                </h5>
+                <p>
+                  Marketing Head
+                </p>
+              </div>
+              <div class="social_box">
+                <a href="#">
+                  <i class="fa fa-facebook" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-linkedin" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-instagram" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-youtube-play" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-sm-6">
+            <div class="box ">
+              <div class="img-box">
+                <img src="static/images/team-4.jpg" class="img1" alt="">
+              </div>
+              <div class="detail-box">
+                <h5>
+                  Josephine Allard
+                </h5>
+                <p>
+                  Marketing Head
+                </p>
+              </div>
+              <div class="social_box">
+                <a href="#">
+                  <i class="fa fa-facebook" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-linkedin" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-instagram" aria-hidden="true"></i>
+                </a>
+                <a href="#">
+                  <i class="fa fa-youtube-play" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end team section -->
+
+
+  <!-- client section -->
+
+  <!-- footer section -->
+
+  <!-- jQery -->
+  <script type="text/javascript" src="static/js/jquery-3.4.1.min.js"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script type="text/javascript" src="static/js/bootstrap.js"></script>
+  <!-- owl slider -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- custom js -->
+  <script type="text/javascript" src="static/js/custom.js"></script>
+  <!-- Google Map -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
+  </script>
+  <!-- End Google Map -->
+
+</body>
+
+</html>
