@@ -243,10 +243,10 @@ def vendor_dashboard(request):
         # Check if the price and quantity are valid numbers
         try:
             price = float(price)
-            quantity = int(quantity)
+            quantity = str(quantity)
         except ValueError:
             return render(request, 'products/vendor_dashboard.html', {
-                'error_message': 'Price and quantity must be valid numbers.'
+                'error_message': 'Price must be valid numbers.'
             })
 
         # Find the category
@@ -302,10 +302,10 @@ def edit_product(request, product_id):
         # Check if the price and quantity are valid numbers
         try:
             new_price = float(price)
-            quantity = int(quantity)
+            quantity = str(quantity)
         except ValueError:
             return render(request, 'products/edit_product.html', {
-                'error_message': 'Price and quantity must be valid numbers.',
+                'error_message': 'Price  must be valid numbers.',
                 'product': product
             })
 
