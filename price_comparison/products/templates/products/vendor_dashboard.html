@@ -25,8 +25,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        h1,
-        h2 {
+        h1, h2 {
             color: white;
             text-align: center;
         }
@@ -92,15 +91,12 @@
             margin-top: 20px;
         }
 
-        table,
-        th,
-        td {
+        table, th, td {
             border: 1px solid rgb(27, 98, 152);
             text-align: left;
         }
 
-        th,
-        td {
+        th, td {
             padding: 15px;
         }
 
@@ -122,7 +118,6 @@
 
         td a.edit {
             color: #007bff;
-            /* Blue for edit */
         }
 
         td a.edit:hover {
@@ -131,7 +126,6 @@
 
         td a.delete {
             color: #dc3545;
-            /* Red for delete */
         }
 
         td a.delete:hover {
@@ -141,7 +135,6 @@
         .buy-btn {
             padding: 8px 15px;
             background-color: #28a745;
-            /* Green color for Buy */
             color: white;
             text-decoration: none;
             border-radius: 5px;
@@ -149,9 +142,7 @@
 
         .buy-btn:hover {
             background-color: #218838;
-            /* Darker green on hover */
         }
-
 
         /* Mobile-friendly design */
         @media screen and (max-width: 768px) {
@@ -221,7 +212,7 @@
             <label for="price">Price:</label>
             <input type="number" step="0.01" name="price" id="price" required>
 
-            <label for="quantity">Stock:</label>
+            <label for="quantity">Stock / Buy Link:</label>
             <input type="text" name="quantity" id="quantity" required>
 
             <label for="image">Image:</label>
@@ -259,18 +250,14 @@
                     <td>{{ product.name }}</td>
                     <td>${{ product.price }}</td>
                     <td>
-                        {% if product.buy_link %}
-                        <a href="{{ product.buy_link }}" class="button buy-btn">Buy</a>
+                        {% if product.quantity|slice:":4" == "http" or product.quantity|slice:":5" == "https" %}
+                            <a href="{{ product.quantity }}" class="buy-btn" target="_blank">Buy</a>
                         {% else %}
-                        {{ product.quantity }}
+                            {{ product.quantity }}
                         {% endif %}
                     </td>
                     <td><img src="{{ product.image.url }}" alt="{{ product.name }}"></td>
-                    <td>
-                        <div id="description-{{ product.id }}" class="collapse">
-                            <p>{{ product.description }}</p>
-                        </div>
-                    </td>
+                    <td>{{ product.description }}</td>
                     <td>
                         <a href="{% url 'edit_product' product.id %}" class="edit">
                             <i class="fas fa-edit"></i>
